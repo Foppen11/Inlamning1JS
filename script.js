@@ -1,22 +1,17 @@
 let intress = [
     {
       id: '1', 
-      firstName: 'Max',
-      lastName: 'Forsberg',
-      email: 'max@mail.com',
+      firstName: 'Tora',
+      lastName: 'Svensson',
+      email: 'ToraS@mail.com',
     },
     {
       id: '2', 
-      firstName: 'Henric',
-      lastName: 'Forsberg',
-      email: 'henric@mail.com',
+      firstName: 'Wilhelm',
+      lastName: 'Ljungqvist',
+      email: 'Wilhelm@mail.com',
     },
-    {
-      id: '3', 
-      firstName: 'Monica',
-      lastName: 'Forsberg',
-      email: 'monica@mail.com',
-    },
+    
     
 ]
   
@@ -24,8 +19,9 @@ const form = document.querySelector('#regForm');
 const firstName = document.querySelector('#firstName');
 const lastName = document.querySelector('#lastName');
 const email = document.querySelector('#email');
-const output = document.querySelector('#intress');
-  
+const output = document.querySelector('#intress');  
+let savedId;
+
 
 const validateNames = (names) => {
     let input = document.querySelector(names);
@@ -46,11 +42,19 @@ const validateNames = (names) => {
 
 const validateEmail = (_email) => {
   
-    if(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(_email.value)) {
+    if(_email.value.trim() === ''){
+        _email.classList.remove('is-valid');
+        _email.classList.add('is-invalid');
+        document.getElementById("emailError").innerHTML = "Email can not be empty";
+        _email.focus();
+        return false;
+    }
+    else if(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(_email.value)) {
         for(i=0; i<intress.length; i++){
             if(_email.value === intress[i].email){
                 _email.classList.remove('is-valid');
                 _email.classList.add('is-invalid');
+                document.getElementById("emailError").innerHTML = "Email has to be unique";
                 _email.focus();
                 return false;
             }
@@ -62,6 +66,7 @@ const validateEmail = (_email) => {
     else {
         _email.classList.remove('is-valid');
         _email.classList.add('is-invalid');
+        document.getElementById("emailError").innerHTML = "Please enter a valid email";
         _email.focus();
         return false;
     }
@@ -75,60 +80,113 @@ const listIntress = () => {
         <div id="${intress.id}" class="border rounded bg-white p-2 d-flex justify-content-between align-items-center mb-2">
             <div>
                 <h3>${intress.firstName} ${intress.lastName}</h3>
-                <h4>${intress.email}</h4>
+                <small>${intress.email}</small>
             </div>
-            <button class="btn btn-default btn-sm btn-edit"><span class="glyphicon glyphicon-edit"></span>Edit</button>
-            <button class="btn btn-danger">X</button>
+            <div>
+                <button class="btn btn-default btn-sm btn-edit"><span class="glyphicon glyphicon-edit"></span>Edit</button>
+                <button class="btn btn-danger">X</button>
+            </div>
         </div>
       `
     })
 }
+
+
   
   listIntress();
   
   
-regForm.addEventListener('submit', e => {
+regForm.addEventListener('click', e => {
     e.preventDefault();
-  
-    validateNames('#firstName');
-    validateNames('#lastName');
-    validateEmail(email);
+    let tempValiEmail = false;
 
-    if(validateEmail(email) && validateNames('#firstName') && validateNames('#lastName')) {
-        
-        let newIntress = {
-            id: Date.now().toString(), 
-            firstName: firstName.value,
-            lastName: lastName.value,
-            email: email.value,
+    if(e.target.parentNode.innerText === 'Submit'){
+        validateNames('#firstName');
+        validateNames('#lastName');
+        validateEmail(email);
+
+        if(validateEmail(email) && validateNames('#firstName') && validateNames('#lastName')) {
+            let newIntress = {
+                id: Date.now().toString(), 
+                firstName: firstName.value,
+                lastName: lastName.value,
+                email: email.value,
+            }
+            intress.push(newIntress);
+            listIntress();
+            firstName.value = '';
+            lastName.value = '';
+            email.value = '';
+        }
+        else{
+            return
+        }
+    }
+    else if(e.target.parentNode.innerText === 'Save'){
+        validateNames('#firstName');
+        validateNames('#lastName');
+        for(i=0; i<intress.length; i++){
+            if(intress[i].id === savedId){
+                if(email.value !== intress[i].email){
+                    tempValiEmail = validateEmail(email);
+                    i = intress.length;
+                }
+                else{
+                    tempValiEmail = true;
+                    email.classList.add('is-valid');
+                    email.classList.remove('is-invalid');
+                    i = intress.length;
+                }
+            }
+            
         }
     
-        intress.push(newIntress);
-    
-        listIntress();
-    
-        firstName.value = '';
-        lastName.value = '';
-        email.value = '';
+        if(tempValiEmail && validateNames('#firstName') && validateNames('#lastName')) {
+            let editIntress = { 
+                firstName: firstName.value,
+                lastName: lastName.value,
+                email: email.value,
+            }
+            for(i=0; i<intress.length; i++){
+                if(intress[i].id === savedId){
+                    intress[i].firstName = editIntress.firstName;
+                    intress[i].lastName = editIntress.lastName;
+                    intress[i].email = editIntress.email;
+                    i = intress.length;
+                }
+            }
+            listIntress();
+
+            firstName.value = '';
+            lastName.value = '';
+            email.value = '';
+            tempValiEmail = false;
+            document.getElementById("submitSave").innerHTML = "Submit";
+        }
     }
+    
 })
   
 output.addEventListener('click', e => {
     if(e.target.classList.contains('btn-edit')) {
-        // firstName.value = newIntress.firstName;
-        // lastName.value = newIntress.lastName;
-        // email.value = newIntress.email;
-        // console.log(intress.findIndex(newIntress => e.target.parentNode.id))
-        let a = intress.indexOf()
-        console.log(a)
-        
+        document.getElementById("submitSave").innerHTML = "Save";
 
+        for(i=0; i<intress.length; i++){
+            if(intress[i].id === e.target.parentNode.parentNode.id){
+                firstName.value = intress[i].firstName;
+                lastName.value = intress[i].lastName;
+                email.value = intress[i].email;
+                savedId = intress[i].id;
+            }
+        }
     }
 })
+
 
 output.addEventListener('click', e => {
     if(e.target.classList.contains('btn-danger')) {
-        intress = intress.filter(newIntress => newIntress.id !== e.target.parentNode.id)
+        intress = intress.filter(newIntress => newIntress.id !== e.target.parentNode.parentNode.id)
         listIntress();
     }
 })
+

@@ -11,7 +11,7 @@
 <body class="bg-light">
 
     <nav class="text-white bg-info text-center py-2">
-        <h1>INTRESSEANMÄLAN FÖR ATT RÄDDA VÄSTERÅS FLYGPLATS!</h1>
+        <h1>INTRESSELISTAN!</h1>
     </nav>
 
     <div class="container mt-3">
@@ -19,27 +19,25 @@
             <div class="row">
                 <div class="form-goup col-md-6 mb-3">
                     <input type="text" id="firstName" class="form-control" placeholder="First Name">
-                    <div class="invalid-feedback">
+                    <div id="firstNameError" class="invalid-feedback">
                         Please enter your first name.
                     </div>
                 </div>
       
                 <div class="form-goup col-md-6 mb-3">
                     <input type="text" id="lastName" class="form-control" placeholder="Last Name">
-                    <div class="invalid-feedback">
+                    <div id="lastNameError" class="invalid-feedback">
                         Please enter your last name.
                     </div>
                 </div>
       
                 <div class="form-goup col-md-9 mb-3">
                     <input type="email" id="email" class="form-control" placeholder="Email">
-                    <div class="invalid-feedback">
-                        Please enter a unique & valid email address.
-                    </div>
+                    <div id="emailError" class="invalid-feedback"></div>
                 </div>
 
                 <div class="form-goup col-md-3 mb-3">
-                    <button class="btn btn-info">Submit</button>
+                    <button id="submitSave" class="btn btn-info submit">Submit</button>
                 </div>
             </div>
         </form>
@@ -52,8 +50,6 @@
 
         </div>
     </div>
-
-
 
   
 

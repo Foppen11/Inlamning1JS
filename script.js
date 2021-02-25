@@ -49,7 +49,7 @@ const validateEmail = (_email) => {
         _email.focus();
         return false;
     }
-    else if(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(_email.value)) {
+    else if(/^\w+@[a-zA-Z]+?\.[a-zA-Z-]{2,}$/.test(_email.value)) {
         for(i=0; i<intress.length; i++){
             if(_email.value === intress[i].email){
                 _email.classList.remove('is-valid');
@@ -83,7 +83,7 @@ const listIntress = () => {
                 <small>${intress.email}</small>
             </div>
             <div>
-                <button class="btn btn-default btn-sm btn-edit"><span class="glyphicon glyphicon-edit"></span>Edit</button>
+                <button class="btn btn-default btn-sm btn-edit">Edit</button>
                 <button class="btn btn-danger">X</button>
             </div>
         </div>

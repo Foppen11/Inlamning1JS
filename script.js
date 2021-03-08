@@ -47,7 +47,7 @@ const validateEmail = (_email) => {
         _email.focus();
         return false;
     }
-    else if(/^\w+@[a-zA-Z]+?\.[a-zA-Z-]{2,}$/.test(_email.value)) {                         //KOLLAR OM INMATNINGEN HAR GODKÄNDA SYMBOLER
+    else if(/^([\w-]+(?:\.[\a-z]+)*)@((?:[\w-]+\.)*\w[a-z]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/.test(_email.value)) {                         //KOLLAR OM INMATNINGEN HAR GODKÄNDA SYMBOLER
         for(i=0; i<intress.length; i++){
             if(_email.value === intress[i].email){
                 _email.classList.remove('is-valid');

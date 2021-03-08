@@ -11,8 +11,6 @@ let intress = [
       lastName: 'Ljungqvist',
       email: 'Wilhelm@mail.com',
     },
-    
-    
 ]
   
 const form = document.querySelector('#regForm');
@@ -22,11 +20,11 @@ const email = document.querySelector('#email');
 const output = document.querySelector('#intress');  
 let savedId;
 
-
+// VALIDERAR FÖR OCH EFTERNAMN
 const validateNames = (names) => {
     let input = document.querySelector(names);
 
-    if(input.value.trim() === '') {
+    if(input.value.trim() === '') {                                                         //KOLLAR OM INMATNINGEN ÄR TOM
         input.classList.add('is-invalid');
         input.classList.remove('is-valid');
     
@@ -40,16 +38,16 @@ const validateNames = (names) => {
     }
   }
 
+  //VALIDERAR EFTERNAMN
 const validateEmail = (_email) => {
-  
-    if(_email.value.trim() === ''){
+    if(_email.value.trim() === ''){                                                         //KOLLAR OM INMATNINGEN ÄR TOM
         _email.classList.remove('is-valid');
         _email.classList.add('is-invalid');
         document.getElementById("emailError").innerHTML = "Email can not be empty";
         _email.focus();
         return false;
     }
-    else if(/^\w+@[a-zA-Z]+?\.[a-zA-Z-]{2,}$/.test(_email.value)) {
+    else if(/^\w+@[a-zA-Z]+?\.[a-zA-Z-]{2,}$/.test(_email.value)) {                         //KOLLAR OM INMATNINGEN HAR GODKÄNDA SYMBOLER
         for(i=0; i<intress.length; i++){
             if(_email.value === intress[i].email){
                 _email.classList.remove('is-valid');
@@ -72,9 +70,8 @@ const validateEmail = (_email) => {
     }
 }
 
-const listIntress = () => {
+const listIntress = () => {                                                                 //SKAPAR HTML KOD AV OBJEKTEN I ARRAYEN
     output.innerHTML = '';
-  
     intress.forEach(intress => {
         output.innerHTML += `
         <div id="${intress.id}" class="border rounded bg-white p-2 d-flex justify-content-between align-items-center mb-2">
@@ -90,22 +87,19 @@ const listIntress = () => {
       `
     })
 }
-
-
-  
-  listIntress();
+listIntress();
   
   
 regForm.addEventListener('click', e => {
     e.preventDefault();
     let tempValiEmail = false;
 
-    if(e.target.parentNode.innerText === 'Submit'){
+    if(e.target.parentNode.innerText === 'Submit'){                                                 //KOLLAR OM TEXTEN PÅ KNAPPEN ÄR "SUBMIT"
         validateNames('#firstName');
         validateNames('#lastName');
         validateEmail(email);
 
-        if(validateEmail(email) && validateNames('#firstName') && validateNames('#lastName')) {
+        if(validateEmail(email) && validateNames('#firstName') && validateNames('#lastName')) {     //KONTROLLERAR ALL INMATNING OCH SKAPAR ISF ETT NYTT OBJEKT
             let newIntress = {
                 id: Date.now().toString(), 
                 firstName: firstName.value,
@@ -122,11 +116,11 @@ regForm.addEventListener('click', e => {
             return
         }
     }
-    else if(e.target.parentNode.innerText === 'Save'){
+    else if(e.target.parentNode.innerText === 'Save'){                                              //KOLLAR OM TEXTEN PÅ KNAPPEN ÄR "SAVE"
         validateNames('#firstName');
         validateNames('#lastName');
         for(i=0; i<intress.length; i++){
-            if(intress[i].id === savedId){
+            if(intress[i].id === savedId){                                                          //LOOPAR IGENOM OCH KOLLAR SÅ EMAILEN ÄR UNIK OCH VALIBEL
                 if(email.value !== intress[i].email){
                     tempValiEmail = validateEmail(email);
                     i = intress.length;
@@ -141,7 +135,7 @@ regForm.addEventListener('click', e => {
             
         }
     
-        if(tempValiEmail && validateNames('#firstName') && validateNames('#lastName')) {
+        if(tempValiEmail && validateNames('#firstName') && validateNames('#lastName')) {            //KONTROLLERAR ALLA VÄRDEN OCH SPARAR OBJEKTET MED SAMMA ID SOM TIDIGARE
             let editIntress = { 
                 firstName: firstName.value,
                 lastName: lastName.value,
@@ -168,8 +162,8 @@ regForm.addEventListener('click', e => {
 })
   
 output.addEventListener('click', e => {
-    if(e.target.classList.contains('btn-edit')) {
-        document.getElementById("submitSave").innerHTML = "Save";
+    if(e.target.classList.contains('btn-edit')) {                                                   // KOLLAR OM KNAPPTRYCKNINGEN ÄR PÅ EDIT
+        document.getElementById("submitSave").innerHTML = "Save";                                   // ÄNDRAR SUBMITSAVE-KNAPPEN TILL SAVE
 
         for(i=0; i<intress.length; i++){
             if(intress[i].id === e.target.parentNode.parentNode.id){
@@ -183,7 +177,7 @@ output.addEventListener('click', e => {
 })
 
 
-output.addEventListener('click', e => {
+output.addEventListener('click', e => {                                                             // TAR BORT OBJEKT FRÅN ARRAYEN
     if(e.target.classList.contains('btn-danger')) {
         intress = intress.filter(newIntress => newIntress.id !== e.target.parentNode.parentNode.id)
         listIntress();

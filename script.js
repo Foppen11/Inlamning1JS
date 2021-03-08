@@ -23,15 +23,25 @@ let savedId;
 // VALIDERAR FÖR OCH EFTERNAMN
 const validateNames = (names) => {
     let input = document.querySelector(names);
+    let error = document.querySelector(names + 'Error');
 
     if(input.value.trim() === '') {                                                         //KOLLAR OM INMATNINGEN ÄR TOM
+        error.innerHTML = "Name can not be empty";
         input.classList.add('is-invalid');
         input.classList.remove('is-valid');
     
         input.focus();
         return false;
+    }
+    else if(input.value.length < 2){
+        error.innerHTML = "Name must be at least 2 letters";
+        input.classList.add('is-invalid');
+        input.classList.remove('is-valid');
     
-    } else {
+        input.focus();
+        return false;
+    }
+    else {
         input.classList.remove('is-invalid');
         input.classList.add('is-valid');
         return true;
